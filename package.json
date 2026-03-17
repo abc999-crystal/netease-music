@@ -1,0 +1,40 @@
+{
+  "name": "@antskill/netease-music",
+  "version": "1.0.0",
+  "description": "网易云音乐控制 skill。基于网易云音乐官方 API 实现，支持扫码登录、获取每日推荐、歌单管理、歌曲搜索和播放控制。让 AI Agent 可以通过自然语言控制网易云音乐播放。",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "node install-skill.js",
+    "preuninstall": "node uninstall-skill.js",
+    "test": "node install-skill.js && echo 'Installation test completed.'",
+    "lint": "echo 'Add your linting commands here'"
+  },
+  "files": [
+    "SKILL.md",
+    "references/",
+    "scripts/",
+    "install-skill.js",
+    "uninstall-skill.js",
+    ".claude-skill.json"
+  ],
+  "keywords": [
+    "claude-code",
+    "skill",
+    "ai-assistant",
+    "agent-skill",
+    "claude",
+    "netease-music"
+  ],
+  "author": "TODO: Run 'tnpm whoami' to get your username",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abc999-crystal/netease-music.git"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.antgroup-inc.cn"
+  }
+}
