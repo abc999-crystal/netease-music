@@ -1,6 +1,6 @@
 {
   "name": "@antskill/netease-music",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "网易云音乐控制 skill。基于网易云音乐官方 API 实现，支持扫码登录、获取每日推荐、歌单管理、歌曲搜索和播放控制。让 AI Agent 可以通过自然语言控制网易云音乐播放。",
   "main": "index.js",
   "scripts": {
