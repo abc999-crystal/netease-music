@@ -83,7 +83,7 @@ def login_via_qrcode():
         print("请使用网易云音乐 App 扫描二维码登录")
         print("等待扫码中... (按 Ctrl+C 取消)")
         
-        max_retries = 60
+        max_retries = 120
         for i in range(max_retries):
             result = apis.login.LoginQrcodeCheck(uuid)
             code = result['code']

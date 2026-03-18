@@ -12,26 +12,74 @@ warnings.filterwarnings('ignore', message='.*urllib3.*')
 from pathlib import Path
 
 
+def is_app_running(app_name):
+    """检查应用是否在运行"""
+    try:
+        if sys.platform == "darwin":
+            result = subprocess.run(
+                ["pgrep", "-f", app_name],
+                capture_output=True
+            )
+            return result.returncode == 0
+        elif sys.platform == "win32":
+            result = subprocess.run(
+                ['tasklist'], capture_output=True, text=True
+            )
+            return app_name in result.stdout
+    except Exception:
+        return False
+    return False
+    
+def ensure_app_running(app_name):
+    """确保应用已启动"""
+    if not is_app_running(app_name):
+        print(f"正在启动 {app_name}...")
+        if sys.platform == "darwin":
+            subprocess.run(["open", "-a", app_name])
+        elif sys.platform == "win32":
+            subprocess.run(["start", app_name], shell=True)
+        # 等待应用启动
+        import time
+        for _ in range(10):
+            time.sleep(1)
+            if is_app_running(app_name):
+                print("✅ 应用已启动")
+                time.sleep(1)  # 额外等待确保完全就绪
+                return True
+        return False
+    return True
+
 def minimize_window():
     """最小化网易云音乐窗口"""
     try:
         if sys.platform == "darwin":
-            # 使用 AppleScript 最小化网易云音乐
             script = '''
             tell application "System Events"
-                set frontmost of process "cloudmusic" to true
+                tell process "NeteaseMusic"
+                    set frontmost to true
+                end tell
             end tell
-            tell application "网易云音乐"
-                activate
-                set visible of front window to false
+            delay 0.2
+            tell application "System Events"
+                keystroke "m" using command down
             end tell
             '''
             subprocess.run(["osascript", "-e", script], capture_output=True)
         elif sys.platform == "win32":
             # Windows 下最小化
-            subprocess.run(['powershell', '-Command', 
-                '(Get-Process -Name "cloudmusic" -ErrorAction SilentlyContinue).MainWindowHandle | ForEach-Object { [Win32]::ShowWindow($_, 6) }'],
-                capture_output=True)
+            ps_script = '''
+Add-Type @"
+using System;
+using System.Runtime.InteropServices;
+public class Win32 {
+    [DllImport("user32.dll")]
+    public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+}
+"@
+$hwnd = (Get-Process -Name cloudmusic -ErrorAction SilentlyContinue).MainWindowHandle
+if ($hwnd) { [Win32]::ShowWindow($hwnd, 6) }
+'''
+            subprocess.run(['powershell', '-Command', ps_script], capture_output=True)
     except Exception:
         pass
 
@@ -43,7 +91,13 @@ def play(id, resource_type='song', minimize=True):
     print("=" * 50)
     print(f"资源ID: {id}")
     
+    app_name = "NeteaseMusic" if sys.platform == "darwin" else "cloudmusic"
+    
     try:
+        # 先确保客户端已启动
+        if not ensure_app_running(app_name):
+            raise Exception("无法启动网易云音乐客户端")
+        
         command = {"type": resource_type, "id": str(id), "cmd": "play"}
         json_str = json.dumps(command, separators=(",", ":"))
         encoded = base64.b64encode(json_str.encode("utf-8")).decode("utf-8")
@@ -59,10 +113,6 @@ def play(id, resource_type='song', minimize=True):
                 raise FileNotFoundError("macOS open failed")
         
         print("✅ 已发送播放指令")
-        
-        # 等待一下让客户端启动
-        import time
-        time.sleep(1)
         
         if minimize:
             minimize_window()

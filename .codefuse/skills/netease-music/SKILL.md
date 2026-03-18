@@ -8,11 +8,14 @@ allowed-tools: Bash
 
 通过网易云音乐 API 控制音乐播放。当用户请求播放音乐、搜索歌曲、查看每日推荐、管理歌单等操作时，使用此 skill。
 
+**自动登录**：所有需要登录的操作会自动触发扫码登录，用户无需单独说"登录网易云"。
+
 ## 功能列表
 
 | 功能 | 说明 |
 |------|------|
 | 扫码登录 | 启动二维码登录流程 |
+| 退出登录 | 清除本地登录状态 |
 | 检查状态 | 查看当前登录状态和用户信息 |
 | 每日推荐 | 获取今日推荐歌曲列表 |
 | 我的歌单 | 获取用户创建和收藏的歌单 |
@@ -27,9 +30,17 @@ allowed-tools: Bash
 ~/.claude/skills/netease-music/scripts/login.py
 ```
 
-首次使用需要扫码登录，登录状态保存在 `storage/cookies.json`。
+扫码登录，登录状态保存在 `storage/cookies.json`。
 
-### 2. 检查状态
+### 2. 退出登录
+
+```bash
+~/.claude/skills/netease-music/scripts/logout.py
+```
+
+清除本地保存的登录状态。
+
+### 3. 检查状态
 
 ```bash
 ~/.claude/skills/netease-music/scripts/status.py
@@ -37,19 +48,19 @@ allowed-tools: Bash
 
 会显示当前登录状态。
 
-### 3. 每日推荐
+### 4. 每日推荐
 
 ```bash
 ~/.claude/skills/netease-music/scripts/daily_recommend.py
 ```
 
-### 4. 我的歌单
+### 5. 我的歌单
 
 ```bash
 ~/.claude/skills/netease-music/scripts/my_playlists.py
 ```
 
-### 5. 搜索歌曲
+### 6. 搜索歌曲
 
 ```bash
 ~/.claude/skills/netease-music/scripts/search.py "关键词"
@@ -58,7 +69,7 @@ allowed-tools: Bash
 ~/.claude/skills/netease-music/scripts/search.py "关键词" --type 1000
 ```
 
-### 6. 播放歌曲/歌单
+### 7. 播放歌曲/歌单
 
 ```bash
 # 播放单曲（默认会最小化客户端窗口）
@@ -78,6 +89,10 @@ allowed-tools: Bash
 ### 扫码登录
 **User**: "帮我登录网易云音乐"  
 **Action**: 运行 login.py，显示二维码，提示用户扫码
+
+### 退出登录
+**User**: "退出网易云登录"  
+**Action**: 运行 logout.py，清除登录状态
 
 ### 今日推荐
 **User**: "今天有什么推荐歌曲"  

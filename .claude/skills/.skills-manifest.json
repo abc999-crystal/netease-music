@@ -2,7 +2,7 @@
   "skills": {
     "netease-music": {
       "version": "1.0.0",
-      "installedAt": "2026-03-17T07:14:23.368Z",
+      "installedAt": "2026-03-18T10:24:23.370Z",
       "package": "@antskill/netease-music",
       "path": "/Users/huanxiu/antskills/netease-music/.claude/skills/netease-music",
       "target": "claude-code"
