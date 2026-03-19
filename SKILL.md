@@ -20,7 +20,11 @@ allowed-tools: Bash
 | 每日推荐 | 获取今日推荐歌曲列表 |
 | 我的歌单 | 获取用户创建和收藏的歌单 |
 | 搜索歌曲 | 按关键词搜索歌曲或歌单 |
-| 播放控制 | 播放指定歌曲或歌单 |
+| 播放歌曲/歌单 | 播放指定歌曲或歌单 |
+| 播放控制 | 上一首/下一首、暂停/继续播放 |
+| 音量调节 | 增加/降低音量 |
+| 循环模式 | 关闭循环/单曲循环/全部循环 |
+| 随机播放 | 开启/关闭随机播放 |
 
 ## 使用方式
 
@@ -73,13 +77,56 @@ allowed-tools: Bash
 
 ```bash
 # 播放单曲（默认会最小化客户端窗口）
-~/.claude/skills/netease-music/scripts/play.py --id <歌曲ID> --type song
+~/.claude/skills/netease-music/scripts/play.py play <歌曲ID>
 
 # 播放歌单
-~/.claude/skills/netease-music/scripts/play.py --id <歌单ID> --type playlist
+~/.claude/skills/netease-music/scripts/play.py play <歌单ID> --type playlist
+```
 
-# 播放但不最小化窗口
-~/.claude/skills/netease-music/scripts/play.py --id <歌曲ID> --type song --no-minimize
+### 8. 播放控制
+
+```bash
+# 上一首
+~/.claude/skills/netease-music/scripts/play.py previous
+
+# 下一首
+~/.claude/skills/netease-music/scripts/play.py next
+
+# 暂停播放
+~/.claude/skills/netease-music/scripts/play.py pause
+
+# 继续播放
+~/.claude/skills/netease-music/scripts/play.py resume
+```
+
+### 9. 音量调节
+
+```bash
+# 增加音量（默认 25%）
+~/.claude/skills/netease-music/scripts/play.py volume-up
+
+# 降低音量（默认 25%）
+~/.claude/skills/netease-music/scripts/play.py volume-down
+```
+
+### 10. 循环模式
+
+```bash
+# 关闭循环
+~/.claude/skills/netease-music/scripts/play.py loop-off
+
+# 单曲循环
+~/.claude/skills/netease-music/scripts/play.py loop-one
+
+# 全部循环
+~/.claude/skills/netease-music/scripts/play.py loop-all
+```
+
+### 11. 随机播放
+
+```bash
+# 切换随机播放
+~/.claude/skills/netease-music/scripts/play.py shuffle
 ```
 
 **特性**：播放成功后会自动唤起网易云音乐客户端，并默认最小化窗口，提供更好的体验。
@@ -102,7 +149,26 @@ allowed-tools: Bash
 **User**: "播放周杰伦的歌"  
 **Action**: 
 1. search.py "周杰伦"
-2. 用户选择歌曲后，play.py --id <歌曲ID> --type song
+2. 用户选择歌曲后，play.py play <歌曲ID>
+
+### 播放控制
+**User**: "切歌"  
+**Action**: 运行 play.py next
+
+**User**: "暂停"  
+**Action**: 运行 play.py pause
+
+**User**: "继续播放"  
+**Action**: 运行 play.py resume
+
+**User**: "音量调大"  
+**Action**: 运行 play.py volume-up
+
+**User**: "开启单曲循环"  
+**Action**: 运行 play.py loop-one
+
+**User**: "开启随机播放"  
+**Action**: 运行 play.py shuffle
 
 ## 依赖
 
